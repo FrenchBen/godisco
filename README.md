@@ -8,7 +8,6 @@ GoDisco: Discourse REST API Client
 About
 ----------------
 Unofficial Golang client for the Discourse.org REST API: https://meta.discourse.org/t/discourse-api-documentation/22706.
-Inspired by the `VojtechVitek/go-trello` implementation
 
 Requires Go `1.5.3`
 
