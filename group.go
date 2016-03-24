@@ -59,7 +59,7 @@ func GetGroup(req Requester, groupName string) (groupInfo *GroupResponse, err er
 
 // GetGroupMembers list members of a given group
 func GetGroupMembers(req Requester, groupName string) (groupMemberInfo *GroupMembersResponse, err error) {
-	endpoint := fmt.Sprintf("/groups/%s/members.json", groupName)
+	endpoint := fmt.Sprintf("/groups/%s/members.json?limit=10000", groupName)
 	body, _, err := req.Get(endpoint)
 	if err != nil {
 		return nil, err
