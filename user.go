@@ -5,11 +5,6 @@ import (
 	"fmt"
 )
 
-// UserReq interface to facilitate testing
-type UserReq interface {
-	GetUser(user string) (userInfo *UserResponse, err error)
-}
-
 // UserResponse define json response
 type UserResponse struct {
 	UserBadges []struct {
@@ -95,7 +90,25 @@ type userInfo struct {
 	} `json:"groups"` //
 	Featured []string `json:"featured_user_badge_ids"` // [],
 	Card     string   `json:"card_badge"`              // null
+}
 
+type user struct {
+	Name     string `json:"name"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Active   bool   `json:"active"`
+}
+
+// CreateResp typical response after user update
+type CreateResp struct {
+	Success   bool            `json:"success"`
+	Message   string          `json:"message,omitempty"`
+	Active    bool            `json:"active,omitempty"`
+	UserID    int             `json:"user_id,omitempty"`
+	Errors    json.RawMessage `json:"errors,omitempty"`
+	Values    json.RawMessage `json:"values,omitempty"`
+	Developer bool            `json:"is_developer"`
 }
 
 // GetUser sends a request for information about the user
@@ -107,4 +120,23 @@ func GetUser(req Requester, user string) (userInfo *UserResponse, err error) {
 	}
 	err = json.Unmarshal(body, &userInfo)
 	return userInfo, err
+}
+
+// CreateUser creates a new user based on details provided
+func CreateUser(req Requester, name string, username string, email string, password string, active bool) (response *CreateResp, err error) {
+	update := &user{
+		Name:     name,
+		Username: username,
+		Email:    email,
+		Password: password,
+		Active:   active,
+	}
+	data, err := json.Marshal(update)
+	endpoint := "/users"
+	body, _, err := req.Post(endpoint, data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(body, &response)
+	return response, err
 }

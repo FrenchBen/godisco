@@ -48,6 +48,7 @@ func NewClient(ClientEndpoint string, ClientKey string, ClientUser string) (*Cli
 // Get resource string
 func (c *Client) Get(resource string) ([]byte, int, error) {
 	url := fmt.Sprintf("%s%s", c.domain, resource)
+	logrus.Debugf("URL: %v", url)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, 0, err
@@ -66,6 +67,9 @@ func (c *Client) do(req *http.Request) ([]byte, int, error) {
 	if err != nil {
 		return nil, 0, err
 	}
+	logrus.Debugf("req Body: %v", body)
+	logrus.Debugf("Status: %v", resp.StatusCode)
+	logrus.Debugf("Err: %v", err)
 	if resp.StatusCode != 200 && resp.StatusCode != 404 {
 		err = fmt.Errorf("Received unexpected status %d while trying to retrieve the server data with \"%s\"", resp.StatusCode, string(body))
 		return nil, resp.StatusCode, err
@@ -76,15 +80,17 @@ func (c *Client) do(req *http.Request) ([]byte, int, error) {
 
 // Post to resource string the data provided
 func (c *Client) Post(resource string, data []byte) ([]byte, int, error) {
+	logrus.Debugf("POST Data: %v", string(data))
 	apiAuth := url.Values{}
 	apiAuth.Set("api_key", c.key)
 	apiAuth.Add("api_username", c.user)
 	url := fmt.Sprintf("%s%s?%s", c.domain, resource, apiAuth.Encode())
+	logrus.Debugf("URL: %v", url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
 	if err != nil {
 		return nil, 0, err
 	}
+	req.Header.Set("Content-Type", "application/json")
 
 	return c.do(req)
 }
-
