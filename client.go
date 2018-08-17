@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -90,7 +89,6 @@ func (c *Client) Post(resource string, data []byte) ([]byte, int, error) {
 
 // Put to resource string the data provided
 func (c *Client) Put(resource string, data []byte) ([]byte, int, error) {
-	log.Printf("PUT Data: %v", string(data))
 	apiAuth := url.Values{}
 	apiAuth.Set("api_key", c.key)
 	apiAuth.Add("api_username", c.user)

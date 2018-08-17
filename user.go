@@ -196,3 +196,32 @@ func InviteUser(req Requester, email string, message string) (*InviteResp, error
 	invR.Message = r.Success
 	return invR, err
 }
+
+// SendPasswordResetEmail Send password reset email
+func SendPasswordResetEmail(req Requester, user string) error {
+	type parameters struct {
+		Login string `json:"login"`
+	}
+	type response struct {
+		Result    string `json:"result"`
+		UserFound bool   `json:"user_found"`
+	}
+	p := parameters{
+		Login: user,
+	}
+	data, err := json.Marshal(p)
+	endpoint := "/session/forgot_password"
+	body, _, err := req.Post(endpoint, data)
+	if err != nil {
+		return err
+	}
+	var r response
+	err = json.Unmarshal(body, &r)
+	if err != nil {
+		return err
+	}
+	if !r.UserFound {
+		return fmt.Errorf("User %s not found", user)
+	}
+	return err
+}
