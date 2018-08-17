@@ -43,12 +43,13 @@ type UserResponse struct {
 		Moderator bool   `json:"moderator"`
 		Admin     bool   `json:"admin"`
 	} `json:"users,omitempty"`
-	User      userInfo `json:"user"`
+	User      UserInfo `json:"user"`
 	Errors    []string `json:"errors,omitempty"`
 	ErrorType string   `json:"error_type,omitempty"`
 }
 
-type userInfo struct {
+//UserInfo user information
+type UserInfo struct {
 	ID           int      `json:"id"`
 	Username     string   `json:"username"`
 	Avatar       string   `json:"avatar_template"`
@@ -88,8 +89,8 @@ type userInfo struct {
 		Messages    bool   `json:"has_messages"`                       // false,
 		Mentionable bool   `json:"mentionable"`                        // false
 	} `json:"groups"` //
-	Featured []string `json:"featured_user_badge_ids"` // [],
-	Card     string   `json:"card_badge"`              // null
+	Featured []int64 `json:"featured_user_badge_ids"` // [],
+	Card     string  `json:"card_badge"`              // null
 }
 
 type user struct {
@@ -98,6 +99,13 @@ type user struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Active   bool   `json:"active"`
+	Approved bool   `json:"approved"`
+}
+
+type invite struct {
+	Email         string `json:"email"`
+	GroupNames    string `json:"group_names"`
+	CustomMessage string `json:"custom_message"`
 }
 
 // CreateResp typical response after user update
@@ -109,6 +117,12 @@ type CreateResp struct {
 	Errors    json.RawMessage `json:"errors,omitempty"`
 	Values    json.RawMessage `json:"values,omitempty"`
 	Developer bool            `json:"is_developer"`
+}
+
+// InviteResp typical response after invite created
+type InviteResp struct {
+	Success bool   `json:"success"`
+	Message string `json:"message,omitempty"`
 }
 
 // GetUser sends a request for information about the user
@@ -123,13 +137,14 @@ func GetUser(req Requester, user string) (userInfo *UserResponse, err error) {
 }
 
 // CreateUser creates a new user based on details provided
-func CreateUser(req Requester, name string, username string, email string, password string, active bool) (response *CreateResp, err error) {
+func CreateUser(req Requester, name string, username string, email string, password string, active bool, approved bool) (response *CreateResp, err error) {
 	update := &user{
 		Name:     name,
 		Username: username,
 		Email:    email,
 		Password: password,
 		Active:   active,
+		Approved: approved,
 	}
 	data, err := json.Marshal(update)
 	endpoint := "/users"
@@ -139,4 +154,74 @@ func CreateUser(req Requester, name string, username string, email string, passw
 	}
 	err = json.Unmarshal(body, &response)
 	return response, err
+}
+
+//DeactivateUser user
+func DeactivateUser(req Requester, userID int) error {
+	endpoint := fmt.Sprintf("/admin/users/%d/deactivate.json", userID)
+	var data []byte
+	_, _, err := req.Put(endpoint, data)
+	return err
+}
+
+//ActivateUser user
+func ActivateUser(req Requester, userID int) error {
+	endpoint := fmt.Sprintf("/admin/users/%d/activate.json", userID)
+	var data []byte
+	_, _, err := req.Put(endpoint, data)
+	return err
+}
+
+// InviteUser invite a new user
+func InviteUser(req Requester, email string, message string) (*InviteResp, error) {
+	i := &invite{
+		Email:         email,
+		CustomMessage: message,
+	}
+	data, err := json.Marshal(i)
+	endpoint := "/invites"
+	body, _, err := req.Post(endpoint, data)
+	if err != nil {
+		return nil, err
+	}
+	type response struct {
+		Success string `json:"success"`
+	}
+	var r response
+	err = json.Unmarshal(body, &r)
+	invR := &InviteResp{}
+	if r.Success == "OK" {
+		invR.Success = true
+	}
+	invR.Message = r.Success
+	return invR, err
+}
+
+// SendPasswordResetEmail Send password reset email
+func SendPasswordResetEmail(req Requester, user string) error {
+	type parameters struct {
+		Login string `json:"login"`
+	}
+	type response struct {
+		Result    string `json:"result"`
+		UserFound bool   `json:"user_found"`
+	}
+	p := parameters{
+		Login: user,
+	}
+	data, err := json.Marshal(p)
+	endpoint := "/session/forgot_password"
+	body, _, err := req.Post(endpoint, data)
+	if err != nil {
+		return err
+	}
+	var r response
+	err = json.Unmarshal(body, &r)
+	if err != nil {
+		return err
+	}
+	if !r.UserFound {
+		return fmt.Errorf("User %s not found", user)
+	}
+	return err
 }
