@@ -1,5 +1,10 @@
 GoDisco: Discourse REST API Client
 ===============================
+[![Build Status](https://img.shields.io/travis/FrenchBen/godisco/master.svg?style=flat-square)](https://travis-ci.org/FrenchBen/godisco)
+[![Codecov branch](https://img.shields.io/codecov/c/github/FrenchBen/godisco/master.svg?style=flat-square)](https://codecov.io/gh/FrenchBen/godisco)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/FrenchBen/godisco)
+[![Go Report Card](https://goreportcard.com/badge/github.com/FrenchBen/godisco?style=flat-square)](https://goreportcard.com/report/github.com/FrenchBen/godisco)
+
 <p align="center">
   <a href="http://golang.org" target="_blank"><img alt="Go package" src="https://golang.org/doc/gopher/pencil/gopherhat.jpg" width="20%" /></a>
   <a href="https://www.discourse.org/" target="_blank"><img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" alt="Discourse Logo"/></a>
