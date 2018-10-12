@@ -7,7 +7,7 @@ GoDisco: Discourse REST API Client
 
 <p align="center">
   <a href="http://golang.org" target="_blank"><img alt="Go package" src="https://golang.org/doc/gopher/pencil/gopherhat.jpg" width="20%" /></a>
-  <a href="https://www.discourse.org/" target="_blank"><img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" alt="Discourse Logo"/></a>
+  <a href="https://www.discourse.org/" target="_blank"><img src="https://raw.githubusercontent.com/discourse/discourse/master/images/discourse.png" alt="Discourse Logo"/></a>
 </p>
 
 About
