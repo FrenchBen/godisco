@@ -3,12 +3,11 @@ package godisco
 import (
 	"bytes"
 	"fmt"
+	"github.com/Sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
-
-	"github.com/Sirupsen/logrus"
 )
 
 // Requester interface allowing testing further down the line
@@ -16,6 +15,7 @@ type Requester interface {
 	do(*http.Request) ([]byte, int, error)
 	Get(string) ([]byte, int, error)
 	Post(string, []byte) ([]byte, int, error)
+	Put(string, []byte) ([]byte, int, error)
 }
 
 // Client struct to keep track of new client
@@ -87,6 +87,21 @@ func (c *Client) Post(resource string, data []byte) ([]byte, int, error) {
 	url := fmt.Sprintf("%s%s?%s", c.domain, resource, apiAuth.Encode())
 	logrus.Debugf("URL: %v", url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
+	if err != nil {
+		return nil, 0, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	return c.do(req)
+}
+
+// Put to resource string the data provided
+func (c *Client) Put(resource string, data []byte) ([]byte, int, error) {
+	apiAuth := url.Values{}
+	apiAuth.Set("api_key", c.key)
+	apiAuth.Add("api_username", c.user)
+	url := fmt.Sprintf("%s%s?%s", c.domain, resource, apiAuth.Encode())
+	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(data))
 	if err != nil {
 		return nil, 0, err
 	}
