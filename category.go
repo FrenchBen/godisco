@@ -55,55 +55,55 @@ type CategoriesResponse struct {
 	} `json:"category_list"`
 }
 
+//GroupPermission expected struct for group_permissions in CategoryResponse
+type GroupPermission struct {
+	PermissionType int    `json:"permission_type"`
+	GroupName      string `json:"group_name"`
+}
+
 //CategoryResponse expected struct for GetCategory and PostCategory response
 type CategoryResponse struct {
 	Category struct {
-		Id                           int      `json:"id"`
-		Name                         string   `json:"name"`
-		Color                        string   `json:"color"`
-		TextColor                    string   `json:"text_color"`
-		Slug                         string   `json:"slug"`
-		TopicCount                   int      `json:"topic_count"`
-		PostCount                    int      `json:"post_count"`
-		Position                     int      `json:"position"`
-		Description                  string   `json:"description"`
-		DescriptionText              string   `json:"description_text"`
-		TopicUrl                     string   `json:"topic_url"`
-		ReadRestricted               bool     `json:"read_restricted"`
-		Permission                   int      `json:"permission"`
-		NotificationLevel            string   `json:"notification_level"`
-		CanEdit                      bool     `json:"can_edit"`
-		TopicTemplate                string   `json:"topic_template"`
-		HasChildren                  string   `json:"has_children"`
-		SortOrder                    string   `json:"sort_order"`
-		SortAscending                string   `json:"sort_ascending"`
-		ShowSubcategoryList          bool     `json:"show_subcategory_list"`
-		NumFeaturedTopics            int      `json:"num_featured_topics"`
-		DefaultView                  string   `json:"default_view"`
-		SubcategoryListStyle         string   `json:"subcategory_list_style"`
-		DefaultTopPeriod             string   `json:"default_top_period"`
-		MinimumRequiredTags          int      `json:"minimum_required_tags"`
-		NavigateToFirstPostAfterRead bool     `json:"navigate_to_first_post_after_read"`
-		AvailableGroups              []string `json:"available_groups"`
-		AutoCloseHours               string   `json:"auto_close_hours"`
-		AutoCloseBasedOnLastPost     bool     `json:"auto_close_based_on_last_post"`
-		EmailIn                      string   `json:"email_in"`
-		EmailInAllowStrangers        bool     `json:"email_in_allow_strangers"`
-		MailinglistMirror            bool     `json:"mailinglist_mirror"`
-		SuppressFromLatest           bool     `json:"suppress_from_latest"`
-		AllTopicsWiki                bool     `json:"all_topics_wiki"`
-		CannotDeleteReason           string   `json:"cannot_delete_reason"`
-		AllowBadges                  bool     `json:"allow_badges"`
-		TopicFeaturedLinkAllowed     bool     `json:"topic_featured_link_allowed"`
-		UploadedLogo                 string   `json:"uploaded_logo"`
-		UploadedBackground           string   `json:"uploaded_background"`
-		// "group_permissions": []*GroupPermission
-		//   type GroupPermission struct {
-		//     "permission_type": 1,
-		//     "group_name": "everyone"
-		//   }
-		// ],
-		// "custom_fields": {},
+		Id                           int                `json:"id"`
+		Name                         string             `json:"name"`
+		Color                        string             `json:"color"`
+		TextColor                    string             `json:"text_color"`
+		Slug                         string             `json:"slug"`
+		TopicCount                   int                `json:"topic_count"`
+		PostCount                    int                `json:"post_count"`
+		Position                     int                `json:"position"`
+		Description                  string             `json:"description"`
+		DescriptionText              string             `json:"description_text"`
+		TopicUrl                     string             `json:"topic_url"`
+		ReadRestricted               bool               `json:"read_restricted"`
+		Permission                   int                `json:"permission"`
+		NotificationLevel            string             `json:"notification_level"`
+		CanEdit                      bool               `json:"can_edit"`
+		TopicTemplate                string             `json:"topic_template"`
+		HasChildren                  string             `json:"has_children"`
+		SortOrder                    string             `json:"sort_order"`
+		SortAscending                string             `json:"sort_ascending"`
+		ShowSubcategoryList          bool               `json:"show_subcategory_list"`
+		NumFeaturedTopics            int                `json:"num_featured_topics"`
+		DefaultView                  string             `json:"default_view"`
+		SubcategoryListStyle         string             `json:"subcategory_list_style"`
+		DefaultTopPeriod             string             `json:"default_top_period"`
+		MinimumRequiredTags          int                `json:"minimum_required_tags"`
+		NavigateToFirstPostAfterRead bool               `json:"navigate_to_first_post_after_read"`
+		AvailableGroups              []string           `json:"available_groups"`
+		AutoCloseHours               string             `json:"auto_close_hours"`
+		AutoCloseBasedOnLastPost     bool               `json:"auto_close_based_on_last_post"`
+		EmailIn                      string             `json:"email_in"`
+		EmailInAllowStrangers        bool               `json:"email_in_allow_strangers"`
+		MailinglistMirror            bool               `json:"mailinglist_mirror"`
+		SuppressFromLatest           bool               `json:"suppress_from_latest"`
+		AllTopicsWiki                bool               `json:"all_topics_wiki"`
+		CannotDeleteReason           string             `json:"cannot_delete_reason"`
+		AllowBadges                  bool               `json:"allow_badges"`
+		TopicFeaturedLinkAllowed     bool               `json:"topic_featured_link_allowed"`
+		UploadedLogo                 string             `json:"uploaded_logo"`
+		UploadedBackground           string             `json:"uploaded_background"`
+		GroupPermissions             []*GroupPermission `json:"group_permissions"`
 	} `json:"category"`
 }
 
@@ -115,7 +115,6 @@ type CategoryRequest struct {
 	TextColor        string `json:"text_color"`
 	Description      string `json:"description"`
 	ParentCategoryId string `json:"parent_category_id"`
-	// permissions
 }
 
 // GetCategoryList show list of categories
