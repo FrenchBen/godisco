@@ -117,7 +117,7 @@ type CategoryRequest struct {
 	ParentCategoryId string `json:"parent_category_id"`
 }
 
-// GetCategoryList show list of categories
+//GetCategoryList show list of categories
 func GetCategoryList(req Requester) (categories *CategoriesResponse, err error) {
 	endpoint := "/categories.json"
 	body, _, err := req.Get(endpoint)
@@ -128,6 +128,7 @@ func GetCategoryList(req Requester) (categories *CategoriesResponse, err error) 
 	return categories, err
 }
 
+//GetCategory show details of a category
 func GetCategory(req Requester, id string) (category *CategoryResponse, err error) {
 	endpoint := fmt.Sprintf("/c/%s/show.json", id)
 	body, _, err := req.Get(endpoint)
@@ -138,6 +139,7 @@ func GetCategory(req Requester, id string) (category *CategoryResponse, err erro
 	return category, err
 }
 
+//PostCategory add a new category
 func PostCategory(req Requester, category *CategoryRequest) (response *CategoryResponse, err error) {
 	data, err := json.Marshal(category)
 	endpoint := "/categories.json"
