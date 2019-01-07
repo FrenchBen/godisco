@@ -136,6 +136,20 @@ func GetUser(req Requester, user string) (userInfo *UserResponse, err error) {
 	return userInfo, err
 }
 
+//GetUsers send a request for information about all users
+func GetUsers(req Requester, flag string, order string, ascending bool, page int, show_emails bool) (userInfo []*UserResponse, err error) {
+	if flag == "" {
+		flag = "active"
+	}
+	endpoint := fmt.Sprintf("/admin/users/list/%s.json", flag)
+	body, _, err := req.Get(endpoint)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(body, &userInfo)
+	return userInfo, err
+}
+
 // CreateUser creates a new user based on details provided
 func CreateUser(req Requester, name string, username string, email string, password string, active bool, approved bool) (response *CreateResp, err error) {
 	update := &user{
